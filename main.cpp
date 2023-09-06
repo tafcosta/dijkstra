@@ -7,7 +7,7 @@ class Graph{
 public:
   Graph(int nVertex) : adj_list(nVertex) {}
 
-  void add_edge(int u, int v, int distance){
+  void add_edge(int u, int v, double distance){
     adj_list[u].emplace_back(v, distance);
     adj_list[v].emplace_back(u, distance);
   }
