@@ -11,9 +11,14 @@ public:
     adj_list[u].emplace_back(v, distance);
     adj_list[v].emplace_back(u, distance);
   }
+
+  int get_nVertex(){
+    return nVertex;
+  }
   
 private:
-  vector<vector<pair<int, int>>> adj_list; 
+  vector<vector<pair<int, int>>> adj_list;
+  int nVertex;
 };
 
 int main(){
