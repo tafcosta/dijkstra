@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <queue>
 
 using namespace std;
 
@@ -8,43 +9,58 @@ using namespace std;
 
 class Graph{
 public:
-  Graph(int nVertex) : adj_list(nVertex), dist_toOtherVertices(nVertex, vector<double>(nVertex, INF)), nVertex(nVertex), visited(false) {}
+  Graph(int nVertices) : adj_list(nVertices), nVertices(nVertices), visited(nVertices, false) {}
 
   void add_edge(int u, int v, double distance){
     adj_list[u].emplace_back(v, distance);
     adj_list[v].emplace_back(u, distance);
   }
 
-  vector<vector<double>> dist_toOtherVertices;
   vector<bool> visited;
   
-  int get_nVertex(){
-    return nVertex;
+  int get_nVertices(){
+    return nVertices;
   }
   
 private:
   vector<vector<pair<int, double>>> adj_list;
-  int nVertex;
+  int nVertices;
 };
 
 class Dijkstra{
 public:
-  Dijkstra(Graph& graph, int SrcVertex) : graph_(graph), SrcVertex(SrcVertex){
-    graph_.dist_toOtherVertices[SrcVertex][SrcVertex] = 0.0;
-    nVertex = graph_.get_nVertex();
+  Dijkstra(Graph& graph, int srcVertex) : graph_(graph), srcVertex(srcVertex){
+    distFromSrcVertex.assign(graph.get_nVertices(), INF);
+    distFromSrcVertex[srcVertex] = 0.0;
+    graph_.visited[srcVertex] = true;
+    nVertices = graph_.get_nVertices();
+
+    minHeap.push({srcVertex, 0.0});
   }
 
+  vector<double> distFromSrcVertex;
+
+  struct CompareVertices {
+    bool operator()(const pair<int, double>& a, const pair<int, double>& b) {
+      return a.second > b.second; 
+    }
+  };
   
+  priority_queue<pair<int, double>, vector<pair<int, double>>, CompareVertices> minHeap;
+
+  void search(){
+    
+  }
   
 private:
   Graph& graph_;
-  int nVertex;
-  int SrcVertex;
+  int nVertices;
+  int srcVertex;
 };
 
 int main(){
-  int nVertex = 5; 
-  Graph g(nVertex);
+  int nVertices = 5; 
+  Graph g(nVertices);
 
   // Adding edges to the graph
   g.add_edge(0, 1, 2);
@@ -52,5 +68,9 @@ int main(){
   g.add_edge(1, 2, 1);
   g.add_edge(2, 3, 1);
   g.add_edge(3, 4, 3);
-  
+
+  Dijkstra dijkstra(g, 0);
+
+  for (int i = 0; i < dijkstra.distFromSrcVertex.size(); ++i)
+    cout << "Distance from vertex 0 to vertex " << i << ": " << dijkstra.distFromSrcVertex[i] << endl;
 }
