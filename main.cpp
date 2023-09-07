@@ -8,7 +8,7 @@ using namespace std;
 
 class Graph{
 public:
-  Graph(int nVertex) : adj_list(nVertex), dist_toOtherVertices(nVertex, vector<double>(nVertex, INF)), nVertex(nVertex), visited(False) {}
+  Graph(int nVertex) : adj_list(nVertex), dist_toOtherVertices(nVertex, vector<double>(nVertex, INF)), nVertex(nVertex), visited(false) {}
 
   void add_edge(int u, int v, double distance){
     adj_list[u].emplace_back(v, distance);
