@@ -9,6 +9,12 @@ using namespace std;
 
 class Graph{
 public:
+  struct Edge {
+    int target;
+    double dist;
+    Edge(int _target, double _dist) : target(_target), dist(_dist) {}
+  };
+  
   Graph(int nVertices) : adj_list(nVertices), nVertices(nVertices), visited(nVertices, false) {}
 
   void add_edge(int u, int v, double distance){
@@ -23,7 +29,7 @@ public:
   }
   
 private:
-  vector<vector<pair<int, double>>> adj_list;
+  vector<vector<Edge>> adj_list;
   int nVertices;
 };
 
@@ -49,7 +55,24 @@ public:
   priority_queue<pair<int, double>, vector<pair<int, double>>, CompareVertices> minHeap;
 
   void search(){
-    
+    while(!minHeap.empty()){
+      int u = minHeap.top().first;
+      double dist_u = minHeap.top().second;
+      minHeap.pop();
+
+      if (dist_u > distFromSrcVertex[u])
+	continue;
+
+      for (const Edge& edge : graph_.adj_list[u]) {
+	int v = edge.first;
+	double distance = edge.second;
+
+	if (distFromSrcVertex[u] + distance < distFromSrcVertex[v]) {
+	  distFromSrcVertex[v] = distFromSrcVertex[u] + distance;
+	  minHeap.push({v, distFromSrcVertex[v]});
+	}
+      }
+    }
   }
   
 private:
@@ -62,7 +85,6 @@ int main(){
   int nVertices = 5; 
   Graph g(nVertices);
 
-  // Adding edges to the graph
   g.add_edge(0, 1, 2);
   g.add_edge(0, 2, 4);
   g.add_edge(1, 2, 1);
@@ -71,6 +93,8 @@ int main(){
 
   Dijkstra dijkstra(g, 0);
 
+  dijkstra.search();
+  
   for (int i = 0; i < dijkstra.distFromSrcVertex.size(); ++i)
     cout << "Distance from vertex 0 to vertex " << i << ": " << dijkstra.distFromSrcVertex[i] << endl;
 }
