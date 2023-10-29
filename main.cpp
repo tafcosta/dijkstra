@@ -27,9 +27,8 @@ public:
   }
 
   vector<bool> visited;
-
   vector<vector<Edge>> adj_list;
-  
+
 private:
   int nVertices;
 };
@@ -80,8 +79,15 @@ private:
   int srcVertex;
 };
 
-int main(){
-  int nVertices = 5; 
+int main(int argc, char* argv[]) {
+  if (argc != 2) {
+    cerr << "Usage: " << argv[0] << " <source_vertex>" << endl;
+    return 1;
+  }
+
+  int srcVertex = atoi(argv[1]);
+  int nVertices = 5;
+  
   Graph g(nVertices);
 
   g.add_edge(0, 1, 2);
@@ -90,10 +96,9 @@ int main(){
   g.add_edge(2, 3, 1);
   g.add_edge(3, 4, 3);
 
-  Dijkstra dijkstra(g, 0);
-
+  Dijkstra dijkstra(g, srcVertex);
   dijkstra.search();
   
   for (int i = 0; i < dijkstra.distFromSrcVertex.size(); ++i)
-    cout << "Distance from vertex 0 to vertex " << i << ": " << dijkstra.distFromSrcVertex[i] << endl;
+    cout << "Distance from vertex " << srcVertex << " to vertex " << i << ": " << dijkstra.distFromSrcVertex[i] << endl;
 }
