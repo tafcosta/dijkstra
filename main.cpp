@@ -53,6 +53,7 @@ public:
   priority_queue<pair<int, double>, vector<pair<int, double>>, CompareVertices> minHeap;
   
   void search(){
+
     while(!minHeap.empty()){
       int u         = minHeap.top().first;
       double dist_u = minHeap.top().second;
@@ -68,11 +69,10 @@ public:
 	if (distFromSrcVertex[u] + distance < distFromSrcVertex[v]) {
 	  distFromSrcVertex[v] = distFromSrcVertex[u] + distance;
 	  minHeap.push({v, distFromSrcVertex[v]});
-	}
-
-	cout << "Node at the top of the min-heap: " << minHeap.top() << endl;
-	
+	}	
       }
+
+      cout << "Node at the top of the min-heap: " << minHeap.top().first << endl;
     }
   }
   
