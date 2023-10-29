@@ -9,27 +9,28 @@ using namespace std;
 
 class Graph{
 public:
-  struct Edge {
-    int target;
-    double dist;
-    Edge(int _target, double _dist) : target(_target), dist(_dist) {}
-  };
-  
   Graph(int nVertices) : adj_list(nVertices), nVertices(nVertices), visited(nVertices, false) {}
 
+  struct Edge {
+    int first;
+    double second;
+    Edge(int _target, double _dist) : first(_target), second(_dist) {}
+  };
+  
   void add_edge(int u, int v, double distance){
     adj_list[u].emplace_back(v, distance);
     adj_list[v].emplace_back(u, distance);
   }
 
-  vector<bool> visited;
-  
   int get_nVertices(){
     return nVertices;
   }
+
+  vector<bool> visited;
+
+  vector<vector<Edge>> adj_list;
   
 private:
-  vector<vector<Edge>> adj_list;
   int nVertices;
 };
 
@@ -39,7 +40,7 @@ public:
     distFromSrcVertex.assign(graph.get_nVertices(), INF);
     distFromSrcVertex[srcVertex] = 0.0;
     graph_.visited[srcVertex] = true;
-    nVertices = graph_.get_nVertices();
+    //    nVertices = graph_.get_nVertices();
 
     minHeap.push({srcVertex, 0.0});
   }
@@ -48,22 +49,22 @@ public:
 
   struct CompareVertices {
     bool operator()(const pair<int, double>& a, const pair<int, double>& b) {
-      return a.second > b.second; 
+      return a.second > b.second;
     }
   };
-  
-  priority_queue<pair<int, double>, vector<pair<int, double>>, CompareVertices> minHeap;
 
+  priority_queue<pair<int, double>, vector<pair<int, double>>, CompareVertices> minHeap;
+  
   void search(){
     while(!minHeap.empty()){
-      int u = minHeap.top().first;
+      int u         = minHeap.top().first;
       double dist_u = minHeap.top().second;
       minHeap.pop();
 
       if (dist_u > distFromSrcVertex[u])
 	continue;
 
-      for (const Edge& edge : graph_.adj_list[u]) {
+      for (const Graph::Edge edge : graph_.adj_list[u]) {
 	int v = edge.first;
 	double distance = edge.second;
 
@@ -77,7 +78,7 @@ public:
   
 private:
   Graph& graph_;
-  int nVertices;
+  //  int nVertices;
   int srcVertex;
 };
 
