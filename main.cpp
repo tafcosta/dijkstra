@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <cmath>
 #include <queue>
@@ -12,9 +13,9 @@ public:
   Graph(int nVertices) : adj_list(nVertices), nVertices(nVertices), visited(nVertices, false) {}
 
   struct Edge {
-    int first;
-    double second;
-    Edge(int _target, double _dist) : first(_target), second(_dist) {}
+    int target;
+    double dist;
+    Edge(int _target, double _dist) : target(_target), dist(_dist) {}
   };
   
   void add_edge(int u, int v, double distance){
@@ -63,8 +64,8 @@ public:
 	continue;
 
       for (const Graph::Edge edge : graph_.adj_list[u]) {
-	int v = edge.first;
-	double distance = edge.second;
+	int v = edge.target;
+	double distance = edge.dist;
 
 	if (distFromSrcVertex[u] + distance < distFromSrcVertex[v]) {
 	  distFromSrcVertex[v] = distFromSrcVertex[u] + distance;
@@ -81,21 +82,30 @@ private:
 
 int main(int argc, char* argv[]) {
   if (argc != 2) {
-    cerr << "Usage: " << argv[0] << " <source_vertex>" << endl;
+    cerr << "Usage: " << argv[0] << " <input_file>" << endl;
+    return 1;
+  }
+  
+  ifstream inputFile(argv[1]);
+  if (!inputFile.is_open()) {
+    cerr << "Error: Could not open input file." << endl;
     return 1;
   }
 
-  int srcVertex = atoi(argv[1]);
-  int nVertices = 5;
+  int nVertices, srcVertex;
+  inputFile >> nVertices >> srcVertex;
   
   Graph g(nVertices);
 
-  g.add_edge(0, 1, 2);
-  g.add_edge(0, 2, 4);
-  g.add_edge(1, 2, 1);
-  g.add_edge(2, 3, 1);
-  g.add_edge(3, 4, 3);
+  int from, to;
+  double weight;
 
+  while (inputFile >> from >> to >> weight) {
+    g.add_edge(from, to, weight);
+  }
+
+  inputFile.close();
+  
   Dijkstra dijkstra(g, srcVertex);
   dijkstra.search();
   
