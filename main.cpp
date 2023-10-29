@@ -40,7 +40,6 @@ public:
     distFromSrcVertex.assign(graph.get_nVertices(), INF);
     distFromSrcVertex[srcVertex] = 0.0;
     graph_.visited[srcVertex] = true;
-    //    nVertices = graph_.get_nVertices();
 
     minHeap.push({srcVertex, 0.0});
   }
@@ -78,7 +77,6 @@ public:
   
 private:
   Graph& graph_;
-  //  int nVertices;
   int srcVertex;
 };
 
