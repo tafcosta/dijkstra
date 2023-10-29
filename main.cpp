@@ -69,6 +69,9 @@ public:
 	  distFromSrcVertex[v] = distFromSrcVertex[u] + distance;
 	  minHeap.push({v, distFromSrcVertex[v]});
 	}
+
+	cout << "Node at the top of the min-heap: " << minHeap.top() << endl;
+	
       }
     }
   }
