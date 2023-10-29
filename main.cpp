@@ -10,7 +10,7 @@ using namespace std;
 
 class Graph{
 public:
-  Graph(int nVertices) : adj_list(nVertices), nVertices(nVertices), visited(nVertices, false) {}
+  Graph(int nVertices) : adj_list(nVertices), nVertices(nVertices) {}
 
   struct Edge {
     int target;
@@ -27,7 +27,6 @@ public:
     return nVertices;
   }
 
-  vector<bool> visited;
   vector<vector<Edge>> adj_list;
 
 private:
@@ -39,7 +38,6 @@ public:
   Dijkstra(Graph& graph, int srcVertex) : graph_(graph), srcVertex(srcVertex){
     distFromSrcVertex.assign(graph.get_nVertices(), INF);
     distFromSrcVertex[srcVertex] = 0.0;
-    graph_.visited[srcVertex] = true;
 
     minHeap.push({srcVertex, 0.0});
   }
